@@ -80,7 +80,12 @@ class Po2Md:
         'code_end_string_escaped',
         'wikilink_start_string',
         'wikilink_end_string',
-
+        # modif
+        'latexmath_start_string',
+        'latexmath_end_string',
+        'latexmathdisplay_start_string',
+        'latexmathdisplay_end_string',
+        # end modif
         # Public class properties
         'current_msgid',
         'current_tcomment',
@@ -252,6 +257,22 @@ class Po2Md:
                 self.wikilink_start_string
             self._leavespan_replacer[md4c.SpanType.WIKILINK.value] = \
                 self.wikilink_end_string
+            
+        # Added code to get latex code translated to md file
+        if 'latex_math_spans' in self.extensions:
+            self.latexmath_start_string = kwargs.get('latexmath_start_string', '$', )
+            self._enterspan_replacer[md4c.SpanType.LATEXMATH.value] = self.latexmath_start_string
+
+            self.latexmath_end_string = kwargs.get('latexmath_end_string', '$', )
+            self._leavespan_replacer[md4c.SpanType.LATEXMATH.value] = self.latexmath_end_string
+
+            self.latexmathdisplay_start_string = kwargs.get('latexmathdisplay_start_string', '$$', )
+            self._enterspan_replacer[md4c.SpanType.LATEXMATH_DISPLAY.value] = self.latexmathdisplay_start_string
+
+            self.latexmathdisplay_end_string = kwargs.get('latexmathdisplay_end_string', '$$', )
+            self._leavespan_replacer[md4c.SpanType.LATEXMATH_DISPLAY.value] = self.latexmathdisplay_end_string
+        # end modif
+
 
         self._inside_htmlblock = [
             False,  # the parser is inside an HTML block
